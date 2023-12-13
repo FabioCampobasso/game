@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sky Jump Game</title>
+    <style>
+        #gameArea {
+            width: 1080px;
+            height: 1920px;
+            position: relative;
+            background-image: url('SFONDO.png');
+            background-size: cover;
+            overflow: hidden;
+            animation: scrollBackground 120s linear infinite;
+        }
+
+        @keyframes scrollBackground {
+            0% {
+                background-position: 0% 100%;
+            }
+            100% {
+                background-position: 0% 0%;
+            }
+        }
+
+        .platform {
+            width: 70px;
+            height: 20px;
+            background-color: green;
+            position: absolute;
+        }
+
+        #player {
+            width: 30px;
+            height: 30px;
+            background-color: white;
+            position: absolute;
+            border-radius: 50%;
+            animation: turbulence 2s ease-in-out infinite alternate;
+        }
+
+#player::after {
+    content: "";
+    width: 30px;
+    height: 30px;
+    background-color: rgba(255, 255, 255, 0.8); /* Aumenta l'opacità per rendere la scia più evidente */
+    position: absolute;
+    border-radius: 50%;
+    animation: trail 0.3s ease-in-out infinite;
+}
+
+
+        @keyframes turbulence {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            25% {
+                transform: translateY(-10px);
+            }
+            75% {
+                transform: translateY(10px);
+            }
+        }
+
+        @keyframes trail {
+            0%, 100% {
+                transform: scale(0);
+            }
+            50% {
+                transform: scale(3);
+                opacity: 0;
+            }
+        }
+
+        #ground {
+            width: 100%;
+            height: 20px;
+            background-color: brown;
+            position: absolute;
+            bottom: 0;
+        }
+
+        #restartButton {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 10px 20px;
+            background-color: lightblue;
+            border: none;
+            cursor: pointer;
+        }
+
+        #playButton {
+            width: 150px;
+            height: 60px;
+            font-size: 20px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px #999;
+        }
+
+        #playButton:hover {
+            background-color: #45a049;
+        }
+
+        #playButton:active {
+            background-color: #45a049;
+            box-shadow: 0 2px #666;
+            transform: translate(-50%, -48%);
+        }
+    </style>
+</head>
+<body>
+<audio id="backgroundMusic" src="Tedua.mp3"></audio>
+<button id="playButton">Play</button>
+<div id="gameArea">
+    <button id="restartButton" style="display:none;">Restart</button>
+    <div id="player"></div>
+    <div id="ground"></div>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>
+
