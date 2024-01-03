@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gioco di Salto</title>
+    <style>
+        @keyframes scrollBackground {
+            from { background-position: 0 0; }
+            to { background-position: 100% 0; }
+        }
+
+        #gameArea { 
+            position: relative; 
+            width: 540px; 
+            height: 960px; 
+            background-image: url('sfondo_thasup.gif'); /* Imposta l'immagine di sfondo */
+            background-repeat: repeat-x;
+            animation: scrollBackground 60s linear infinite;
+            overflow: hidden; 
+        }
+        .player, .obstacle {
+            position: absolute;
+            bottom: 240px;
+        }
+        .player { 
+            width: 170px; 
+            height: 170px; 
+            background-image: url('player.png'); 
+            background-size: cover;
+            left: 50px; 
+        }
+        .obstacle {
+            width: 50px; 
+            height: 50px; 
+            background-color: black; 
+            right: 0; 
+        }
+		
+.ground {
+            position: absolute;
+            bottom: 190px; /* Posiziona la linea a 190px dal basso */
+            width: 100%; /* Larghezza completa dell'area di gioco */
+            height: 2px; /* Altezza della linea di terra */
+            background-color: black; /* Colore della linea di terra */
+        }
+		
+.game-over-card {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white; /* Sfondo bianco per la card */
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px; /* Angoli arrotondati */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombra per la card */
+        }
+
+        #gameOverBanner h1 {
+            margin: 0 0 20px 0; /* Spazio sotto il titolo */
+        }
+
+       
+    </style>
+</head>
+<body>
+    <div id="gameArea">
+        <div class="player" id="player"></div>
+        <!-- Elementi pioggia qui -->
+
+        <!-- Banner di Game Over all'interno della game area -->
+        <div class="game-over-card" id="gameOverBanner">
+            <h1>Game Over</h1>
+            <button onclick="restartGame()">Riavvia Gioco</button>
+        </div>
+    </div>
+	
+    <script>
+const gameArea = document.getElementById('gameArea');
+let player;
+let gameInterval;
+let isJumping = false;
+
+function initGame() {
+    if (!document.getElementById('player')) {
+        const playerElement = document.createElement('div');
+        playerElement.className = 'player';
+        playerElement.id = 'player';
+        gameArea.appendChild(playerElement);
+    }
+    
+    player = document.getElementById('player'); // Aggiorna il riferimento al giocatore
+    isJumping = false;
+    startObstacles(); // Inizia la creazione degli ostacoli
+    gameArea.style.animationPlayState = 'running'; // Riavvia l'animazione dello sfondo
+    document.getElementById('gameOverBanner').style.display = 'none'; // Nascondi il banner di game over
+}
+
+function jump() {
+    let position = 0;
+    let velocity = 20;
+    isJumping = true;
+    player.style.backgroundImage = "url('salto.png')"; // Cambia immagine durante il salto
+
+    let upInterval = setInterval(() => {
+        if (position <= 0 && velocity < 0) {
+            clearInterval(upInterval);
+            isJumping = false;
+            player.style.backgroundImage = "url('player.png')"; // Ritorna all'immagine normale
+        } else {
+            velocity -= 1; // Effetto gravità
+            position += velocity;
+            player.style.bottom = (position + 240) + 'px'; // Corretto
+        }
+    }, 20);
+}
+
+
+function checkCollision(obstacle) {
+    let playerRect = player.getBoundingClientRect();
+    let obstacleRect = obstacle.getBoundingClientRect();
+    let margin = -30; // Imposta il margine negativo desiderato
+
+    return !(obstacleRect.right + margin < playerRect.left ||
+             obstacleRect.left > playerRect.right + margin ||
+             obstacleRect.bottom + margin < playerRect.top ||
+             obstacleRect.top > playerRect.bottom + margin);
+}
+
+
+function endGame() {
+    clearInterval(gameInterval); // Ferma la creazione di nuovi ostacoli
+    gameArea.style.animationPlayState = 'paused'; // Ferma l'animazione dello sfondo
+    document.getElementById('gameOverBanner').style.display = 'block';
+}
+
+function restartGame() {
+    document.getElementById('gameOverBanner').style.display = 'none';
+    clearObstacles(); // Aggiungi una funzione per eliminare tutti gli ostacoli
+    gameArea.style.animation = 'none'; // Rimuovi l'animazione
+    void gameArea.offsetWidth; // Forza un repaint
+    gameArea.style.animation = 'scrollBackground 60s linear infinite'; // Riaggiungi l'animazione
+    initGame(); // Riavvia il gioco
+}
+
+function clearObstacles() {
+    const obstacles = gameArea.getElementsByClassName('obstacle');
+    while (obstacles.length > 0) {
+        obstacles[0].parentNode.removeChild(obstacles[0]);
+    }
+}
+
+
+
+function createObstacle() {
+    const obstacle = document.createElement('div');
+    obstacle.classList.add('obstacle');
+    gameArea.appendChild(obstacle);
+    let obstacleLeft = gameArea.offsetWidth;
+
+    let moveInterval = setInterval(() => {
+        if (obstacleLeft < -200) { // Larghezza dell'ostacolo
+            clearInterval(moveInterval);
+            gameArea.removeChild(obstacle);
+        } else if (checkCollision(obstacle)) {
+            clearInterval(moveInterval);
+            endGame();
+        } else {
+            obstacleLeft -= 10;
+            obstacle.style.left = obstacleLeft + 'px';
+        }
+    }, 20);
+}
+
+function startObstacles() {
+    gameInterval = setInterval(createObstacle, Math.random() * 2000 + 1000); // Intervallo del gioco
+}
+
+document.addEventListener('click', () => {
+    if (!isJumping) {
+        jump();
+    }
+});
+
+// Inizializza il gioco all'avvio della pagina
+initGame();
+</script>
+
+</html>
+
