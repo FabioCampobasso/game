@@ -98,7 +98,7 @@ function initGame() {
 
 function jump() {
     let position = 0;
-    let velocity = 0;
+    let velocity = 20;
     isJumping = true;
     player.style.backgroundImage = "url('salto.png')"; // Cambia immagine durante il salto
 
@@ -176,11 +176,21 @@ function startObstacles() {
     gameInterval = setInterval(createObstacle, Math.random() * 2000 + 1000); // Intervallo del gioco
 }
 
-document.addEventListener('click', () => {
+
+document.addEventListener('mousedown', (event) => {
+    event.preventDefault(); // Previene comportamenti indesiderati del browser
     if (!isJumping) {
         jump();
     }
 });
+
+document.addEventListener('touchstart', (event) => {
+    event.preventDefault(); // Previene lo zoom o lo scroll indesiderato su dispositivi touch
+    if (!isJumping) {
+        jump();
+    }
+});
+
 
 // Inizializza il gioco all'avvio della pagina
 initGame();
