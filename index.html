@@ -3,41 +3,41 @@
 <head>
     <title>Gioco di Salto</title>
     <style>
-        @keyframes scrollBackground {
-            from { background-position: 0 0; }
-            to { background-position: 100% 0; }
-        }
+@keyframes scrollBackground {
+    from { background-position: 0 0; }
+    to { background-position: 100% 0; }
+}
 
         #gameArea { 
             position: relative; 
-            width: 540px; 
-            height: 960px; 
-            background-image: url('sfondo_thasup.gif'); /* Imposta l'immagine di sfondo */
+            width: 1080px; 
+            height: 1920px; 
+            background-image: url('sfondo.jpg'); /* Imposta l'immagine di sfondo */
             background-repeat: repeat-x;
-            animation: scrollBackground 60s linear infinite;
+             animation: scrollBackground 180s linear infinite;
             overflow: hidden; 
         }
         .player, .obstacle {
             position: absolute;
-            bottom: 240px;
+            bottom: 500px;
         }
         .player { 
-            width: 170px; 
-            height: 170px; 
+            width: 220px; 
+            height: 220px; 
             background-image: url('player.png'); 
             background-size: cover;
             left: 50px; 
         }
         .obstacle {
-            width: 50px; 
-            height: 50px; 
+            width: 60px; 
+            height: 60px; 
             background-color: black; 
             right: 0; 
         }
 		
 .ground {
             position: absolute;
-            bottom: 190px; /* Posiziona la linea a 190px dal basso */
+            bottom: 500px; /* Posiziona la linea a 190px dal basso */
             width: 100%; /* Larghezza completa dell'area di gioco */
             height: 2px; /* Altezza della linea di terra */
             background-color: black; /* Colore della linea di terra */
@@ -65,6 +65,7 @@
 </head>
 <body>
     <div id="gameArea">
+	
         <div class="player" id="player"></div>
         <!-- Elementi pioggia qui -->
 
@@ -108,9 +109,9 @@ function jump() {
             isJumping = false;
             player.style.backgroundImage = "url('player.png')"; // Ritorna all'immagine normale
         } else {
-            velocity -= 1; // Effetto gravità
+            velocity -= 0.9; // Effetto gravità
             position += velocity;
-            player.style.bottom = (position + 240) + 'px'; // Corretto
+            player.style.bottom = (position + 500) + 'px'; // Corretto
         }
     }, 20);
 }
@@ -155,11 +156,13 @@ function clearObstacles() {
 function createObstacle() {
     const obstacle = document.createElement('div');
     obstacle.classList.add('obstacle');
+    let obstacleWidth = Math.floor(Math.random() * (150 - 50 + 1)) + 50; // Genera una larghezza casuale tra 50 e 300
+    obstacle.style.width = obstacleWidth + 'px'; // Imposta la larghezza dell'ostacolo
     gameArea.appendChild(obstacle);
     let obstacleLeft = gameArea.offsetWidth;
 
     let moveInterval = setInterval(() => {
-        if (obstacleLeft < -200) { // Larghezza dell'ostacolo
+        if (obstacleLeft < -obstacleWidth) { // Usa la larghezza dell'ostacolo per determinare quando rimuoverlo
             clearInterval(moveInterval);
             gameArea.removeChild(obstacle);
         } else if (checkCollision(obstacle)) {
@@ -171,6 +174,7 @@ function createObstacle() {
         }
     }, 20);
 }
+
 
 function startObstacles() {
     gameInterval = setInterval(createObstacle, Math.random() * 2000 + 1000); // Intervallo del gioco
