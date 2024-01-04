@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
+    <!-- ... -->
     <title>Gioco di Salto</title>
     <style>
 @keyframes scrollBackground {
@@ -45,51 +48,63 @@
 		
 .game-over-card {
             display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white; /* Sfondo bianco per la card */
-            padding: 20px;
-            text-align: center;
-            border-radius: 10px; /* Angoli arrotondati */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombra per la card */
-        }
+  position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-image: url('card.gif');
+    padding: 200px;
+    text-align: center;
+    border-radius: 100px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1; /* Assicurati che sia sopra gli altri elementi */
+}
 
-        #gameOverBanner h1 {
-            margin: 0 0 20px 0; /* Spazio sotto il titolo */
-        }
+
 .fullscreen-card {
     display: block;
     position: absolute;
-    top: 50%;
+    top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
+    background-image: url('card.gif');
+    padding: 200px;
     text-align: center;
-    border-radius: 10px;
+    border-radius: 100px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    z-index: 1000; /* Assicurati che sia sopra gli altri elementi */
+    z-index: 1; /* Assicurati che sia sopra gli altri elementi */
 }
 
-       
+  button {
+    font-family: 'Archivo Black', sans-serif; /* Usa il font Archivo Black */
+    background-color: transparent; /* Colore di sfondo del pulsante */
+    color: white; /* Colore del testo */
+    padding: 15px 32px; /* Padding intorno al testo */
+    text-align: center; /* Allinea il testo al centro */
+    text-decoration: none; /* Rimuove sottolineatura dal testo */
+    display: inline-block; /* Rende il pulsante in linea */
+    font-size: 70px; /* Imposta la dimensione del font */
+    border: none; /* Rimuove il bordo */
+
+}
+
+     
     </style>
 </head>
 <body>
-<!-- Card per la modalità fullscreen -->
 
+
+<audio id="myAudio" src="thasup.mp3"></audio>
 
     <div id="gameArea">
 	  <div class="fullscreen-card" id="fullscreenCard">
-    <button onclick="enableFullscreenAndRestart()">Vai a Fullscreen e Riavvia Gioco</button>
+    <button onclick="enableFullscreenAndRestart()">PLAY</button>
 </div>
         <div class="player" id="player"></div>
         <!-- Elementi pioggia qui -->
 
         <!-- Banner di Game Over all'interno della game area -->
         <div class="game-over-card" id="gameOverBanner">
-            <h1>Game Over</h1>
             <button onclick="restartGame()">Riavvia Gioco</button>
         </div>
     </div>
@@ -150,17 +165,30 @@ function checkCollision(obstacle) {
 function endGame() {
     clearInterval(gameInterval); // Ferma la creazione di nuovi ostacoli
     gameArea.style.animationPlayState = 'paused'; // Ferma l'animazione dello sfondo
-    document.getElementById('gameOverBanner').style.display = 'block';
+
+    var audio = document.getElementById("myAudio");
+    audio.pause(); // Ferma l'audio
+    audio.currentTime = 0; // Riporta l'audio all'inizio
+
+    document.getElementById('gameOverBanner').style.display = 'block'; // Mostra il banner di game over
 }
+
 
 function restartGame() {
     document.getElementById('gameOverBanner').style.display = 'none';
-    clearObstacles(); // Aggiungi una funzione per eliminare tutti gli ostacoli
+    clearObstacles(); // Elimina tutti gli ostacoli
+
     gameArea.style.animation = 'none'; // Rimuovi l'animazione
     void gameArea.offsetWidth; // Forza un repaint
     gameArea.style.animation = 'scrollBackground 60s linear infinite'; // Riaggiungi l'animazione
+
+    var audio = document.getElementById("myAudio");
+    audio.currentTime = 0; // Resettare l'audio all'inizio
+    audio.play(); // Avvia l'audio
+
     initGame(); // Riavvia il gioco
 }
+
 
 function clearObstacles() {
     const obstacles = gameArea.getElementsByClassName('obstacle');
@@ -213,7 +241,22 @@ document.addEventListener('touchstart', (event) => {
     }
 });
 
+function isFullscreenAvailable() {
+    return document.fullscreenEnabled ||
+           document.webkitFullscreenEnabled ||
+           document.mozFullScreenEnabled ||
+           document.msFullscreenEnabled;
+}
+
+if (!isFullscreenAvailable()) {
+    // Nascondi il pulsante fullscreen o mostra un messaggio
+    document.getElementById('fullscreenCard').style.display = 'none';
+}
+
 function enableFullscreenAndRestart() {
+var audio = document.getElementById("myAudio");
+    audio.play();
+	
     if (gameArea.requestFullscreen) {
         gameArea.requestFullscreen();
     } else if (gameArea.mozRequestFullScreen) { /* Firefox */
@@ -231,9 +274,7 @@ function enableFullscreenAndRestart() {
     initGame();
 }
 
-// Aggiungi un event listener per uscire dalla modalità fullscreen e
 
-// Inizializza il gioco all'avvio della pagina
 
 </script>
 
