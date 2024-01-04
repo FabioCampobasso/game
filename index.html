@@ -14,7 +14,7 @@
             height: 1920px; 
             background-image: url('sfondo.jpg'); /* Imposta l'immagine di sfondo */
             background-repeat: repeat-x;
-             animation: scrollBackground 60s linear infinite;
+             animation: scrollBackground 180s linear infinite;
             overflow: hidden; 
         }
         .player, .obstacle {
@@ -59,13 +59,31 @@
         #gameOverBanner h1 {
             margin: 0 0 20px 0; /* Spazio sotto il titolo */
         }
+.fullscreen-card {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Assicurati che sia sopra gli altri elementi */
+}
 
        
     </style>
 </head>
 <body>
+<!-- Card per la modalità fullscreen -->
+
+
     <div id="gameArea">
-	
+	  <div class="fullscreen-card" id="fullscreenCard">
+    <button onclick="enableFullscreenAndRestart()">Vai a Fullscreen e Riavvia Gioco</button>
+</div>
         <div class="player" id="player"></div>
         <!-- Elementi pioggia qui -->
 
@@ -195,9 +213,28 @@ document.addEventListener('touchstart', (event) => {
     }
 });
 
+function enableFullscreenAndRestart() {
+    if (gameArea.requestFullscreen) {
+        gameArea.requestFullscreen();
+    } else if (gameArea.mozRequestFullScreen) { /* Firefox */
+        gameArea.mozRequestFullScreen();
+    } else if (gameArea.webkitRequestFullscreen) { /* Chrome, Safari, Opera */
+        gameArea.webkitRequestFullscreen();
+    } else if (gameArea.msRequestFullscreen) { /* IE/Edge */
+        gameArea.msRequestFullscreen();
+    }
+
+    // Nascondi la card fullscreen
+    document.getElementById('fullscreenCard').style.display = 'none';
+
+    // Riavvia il gioco
+    initGame();
+}
+
+// Aggiungi un event listener per uscire dalla modalità fullscreen e
 
 // Inizializza il gioco all'avvio della pagina
-initGame();
+
 </script>
 
 </html>
