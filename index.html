@@ -17,7 +17,7 @@
             height: 1920px; 
             background-image: url('sfondo.jpg'); /* Imposta l'immagine di sfondo */
             background-repeat: repeat-x;
-             animation: scrollBackground 180s linear infinite;
+             animation: scrollBackground 120s linear infinite;
             overflow: hidden; 
         }
         .player, .obstacle {
@@ -63,19 +63,16 @@
 
 .fullscreen-card {
     display: block;
-    position: fixed; /* Cambiato da absolute a fixed per coprire l'intero schermo */
-    top: 0;
-    left: 0;
-    width: 100vw; /* Larghezza del viewport */
-    height: 100vh; /* Altezza del viewport */
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-image: url('card.gif');
-    background-size: cover; /* Assicura che l'immagine di sfondo copra l'intera card */
-    background-position: center; /* Centra l'immagine di sfondo */
     padding: 200px;
     text-align: center;
-    border-radius: 0; /* Opzionale: rimuovi se vuoi angoli arrotondati */
+    border-radius: 100px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    z-index: 1; /* Mantiene la card sopra gli altri elementi */
+    z-index: 1; /* Assicurati che sia sopra gli altri elementi */
 }
 
 
@@ -125,6 +122,7 @@ function initGame() {
         playerElement.className = 'player';
         playerElement.id = 'player';
         gameArea.appendChild(playerElement);
+		
     }
     
     player = document.getElementById('player'); // Aggiorna il riferimento al giocatore
@@ -184,7 +182,7 @@ function restartGame() {
 
     gameArea.style.animation = 'none'; // Rimuovi l'animazione
     void gameArea.offsetWidth; // Forza un repaint
-    gameArea.style.animation = 'scrollBackground 60s linear infinite'; // Riaggiungi l'animazione
+    gameArea.style.animation = 'scrollBackground 180s linear infinite'; // Riaggiungi l'animazione
 
     var audio = document.getElementById("myAudio");
     audio.currentTime = 0; // Resettare l'audio all'inizio
@@ -245,12 +243,7 @@ document.addEventListener('touchstart', (event) => {
     }
 });
 
-function isFullscreenAvailable() {
-    return document.fullscreenEnabled ||
-           document.webkitFullscreenEnabled ||
-           document.mozFullScreenEnabled ||
-           document.msFullscreenEnabled;
-}
+
 
 if (!isFullscreenAvailable()) {
     // Nascondi il pulsante fullscreen o mostra un messaggio
@@ -260,22 +253,13 @@ if (!isFullscreenAvailable()) {
 function enableFullscreenAndRestart() {
 var audio = document.getElementById("myAudio");
     audio.play();
-	
-    if (gameArea.requestFullscreen) {
-        gameArea.requestFullscreen();
-    } else if (gameArea.mozRequestFullScreen) { /* Firefox */
-        gameArea.mozRequestFullScreen();
-    } else if (gameArea.webkitRequestFullscreen) { /* Chrome, Safari, Opera */
-        gameArea.webkitRequestFullscreen();
-    } else if (gameArea.msRequestFullscreen) { /* IE/Edge */
-        gameArea.msRequestFullscreen();
-    }
+
 
     // Nascondi la card fullscreen
     document.getElementById('fullscreenCard').style.display = 'none';
 
     // Riavvia il gioco
-    initGame();
+     restartGame();
 }
 
 
