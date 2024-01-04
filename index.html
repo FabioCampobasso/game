@@ -63,17 +63,21 @@
 
 .fullscreen-card {
     display: block;
-    position: absolute;
-    top: 30%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: fixed; /* Cambiato da absolute a fixed per coprire l'intero schermo */
+    top: 0;
+    left: 0;
+    width: 100vw; /* Larghezza del viewport */
+    height: 100vh; /* Altezza del viewport */
     background-image: url('card.gif');
+    background-size: cover; /* Assicura che l'immagine di sfondo copra l'intera card */
+    background-position: center; /* Centra l'immagine di sfondo */
     padding: 200px;
     text-align: center;
-    border-radius: 100px;
+    border-radius: 0; /* Opzionale: rimuovi se vuoi angoli arrotondati */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    z-index: 1; /* Assicurati che sia sopra gli altri elementi */
+    z-index: 1; /* Mantiene la card sopra gli altri elementi */
 }
+
 
   button {
     font-family: 'Archivo Black', sans-serif; /* Usa il font Archivo Black */
