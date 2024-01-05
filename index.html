@@ -6,6 +6,8 @@
     <!-- ... -->
     <title>Gioco di Salto</title>
     <style>
+	
+	
 @keyframes scrollBackground {
     from { background-position: 0 0; }
     to { background-position: 100% 0; }
@@ -25,9 +27,9 @@
             bottom: 500px;
         }
         .player { 
-            width: 220px; 
-            height: 220px; 
-            background-image: url('player.png'); 
+            width: 230px; 
+            height: 230px; 
+            background-image: url('player.gif'); 
             background-size: cover;
             left: 50px; 
         }
@@ -142,9 +144,9 @@ function jump() {
         if (position <= 0 && velocity < 0) {
             clearInterval(upInterval);
             isJumping = false;
-            player.style.backgroundImage = "url('player.png')"; // Ritorna all'immagine normale
+            player.style.backgroundImage = "url('player.gif')"; // Ritorna all'immagine normale
         } else {
-            velocity -= 0.9; // Effetto gravità
+            velocity -= 1; // Effetto gravità
             position += velocity;
             player.style.bottom = (position + 500) + 'px'; // Corretto
         }
@@ -155,7 +157,7 @@ function jump() {
 function checkCollision(obstacle) {
     let playerRect = player.getBoundingClientRect();
     let obstacleRect = obstacle.getBoundingClientRect();
-    let margin = -30; // Imposta il margine negativo desiderato
+    let margin = -50; // Imposta il margine negativo desiderato
 
     return !(obstacleRect.right + margin < playerRect.left ||
              obstacleRect.left > playerRect.right + margin ||
