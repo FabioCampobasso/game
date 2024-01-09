@@ -13,15 +13,17 @@
     to { background-position: 100% 0; }
 }
 
-        #gameArea { 
-            position: relative; 
-            width: 1080px; 
-            height: 1920px; 
-            background-image: url('sfondo.jpg'); /* Imposta l'immagine di sfondo */
-            background-repeat: repeat-x;
-             animation: scrollBackground 120s linear infinite;
-            overflow: hidden; 
-        }
+#gameArea { 
+    position: relative; 
+    width: 1080px; 
+    height: 1920px; 
+    background-image: url('sfondo_thasup.jpg'); /* Imposta l'immagine di sfondo */
+    background-repeat: repeat-x;
+    background-size: 16000px 1920px; /* Imposta la dimensione di sfondo */
+    animation: scrollBackground 180s linear infinite;
+    overflow: hidden; 
+}
+
         .player, .obstacle {
             position: absolute;
             bottom: 500px;
@@ -96,7 +98,6 @@
 </head>
 <body>
 
-
 <audio id="myAudio" src="thasup.mp3"></audio>
 
     <div id="gameArea">
@@ -117,6 +118,7 @@ const gameArea = document.getElementById('gameArea');
 let player;
 let gameInterval;
 let isJumping = false;
+
 
 function initGame() {
     if (!document.getElementById('player')) {
@@ -262,6 +264,7 @@ var audio = document.getElementById("myAudio");
 
     // Riavvia il gioco
      restartGame();
+	  
 }
 
 
