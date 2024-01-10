@@ -29,7 +29,20 @@
 </head>
 <body>
     <div class="container">
-        <a href="sms:3665075009?body=07" class="button">Votami</a>
+        <a href="#" id="messageLink" class="button">VOTAMI</a>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+            // iOS detection
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                document.getElementById("messageLink").href = "sms:+3665075009&body=07";
+            } else { // Default to Android
+                document.getElementById("messageLink").href = "sms:+3665075009?body=07";
+            }
+        });
+    </script>
 </body>
 </html>
